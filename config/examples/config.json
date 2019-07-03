@@ -1,0 +1,39 @@
+{
+  "global": {
+    "log_level": "debug",
+    "error_log": "stderr",
+    "access_log": "stdout"
+  },
+  "server": {
+    "listen": [
+      {
+        "port": 8080,
+        "name": "test"
+      }
+    ]
+  },
+  "internal": [
+    {
+      "name": "echo",
+      "description": "testing some echo service",
+      "policy_chain": [
+        {
+          "policy": "apicast.policy.echo"
+        }
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "name": "test",
+      "match": {
+        "uri_path": "/test",
+        "server_port": "test",
+        "http_method": "GET"
+      },
+      "destination": {
+        "service": "echo"
+      }
+    }
+  ]
+}

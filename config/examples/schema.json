@@ -1,0 +1,193 @@
+{
+  "$id": "http://rapier.io/config-v1/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "APIcast Settings",
+  "version": "1.0.0",
+  "type": "object",
+  "definitions": {
+    "service": {
+      "$id": "#service",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Name"
+        },
+        "description": {
+          "type": "string",
+          "title": "Description"
+        },
+        "policy_chain": {
+          "type": "array",
+          "title": "Policy Chain",
+          "description": "The list of APIcast policies in order of execution",
+          "items": {
+            "type": "object",
+            "properties": {
+              "policy": {
+                "type": "string",
+                "title": " ",
+                "enum": [
+                  "apicast.policy.echo",
+                  "apicast.policy.cors",
+                  "apicast.policy.caching",
+                  "apicast.policy.conditional",
+                  "apicast.policy.default_credentials",
+                  "apicast.policy.find_service",
+                  "apicast.policy.headers",
+                  "apicast.policy.ip_check",
+                  "apicast.policy.keycloack_role_check",
+                  "apicast.policy.liquid_context_debug",
+                  "apicast.policy.load_configuration",
+                  "apicast.policy.local_chain",
+                  "apicast.policy.logging",
+                  "apicast.policy.management",
+                  "apicast.policy.routing",
+                  "apicast.policy.soap",
+                  "apicast.policy.url_rewriting",
+                  "apicast.policy.standalone"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "properties": {
+    "global" : {
+      "type": "object",
+      "title": "Global",
+      "properties": {
+        "log_level": {
+          "type": "string",
+          "title": "Debug log level",
+          "description": "The desired level of logging",
+          "default": "emerg",
+          "enum": [
+            "debug",
+            "emerg"
+          ],
+          "enumNames": [
+            "Debug",
+            "Emerg"
+          ]
+        },
+        "error_log": {
+          "type": "string",
+          "title": "Error log level",
+          "description": "The desired level of logging for raised errors",
+          "enum": [
+            "stderr",
+            "/dev/null",
+            "none"
+          ],
+          "enumNames": [
+            "stderr",
+            "Silent",
+            "No logging at all."
+          ]
+        },
+        "access_log": {
+          "type": "string",
+          "title": "Access Log",
+          "description": "Where the logs are going to be displayed",
+          "enum": [
+            "stdout",
+            "none"
+          ],
+          "enumNames": [
+            "stdout",
+            "Not shown"
+          ]
+        },
+        "opentracing_tracer": {
+          "type": "string",
+          "title": "Tracer",
+          "description": "Your favourite Opentracing Tracer",
+          "enum": [
+            "jaeger",
+            "none"
+          ],
+          "enumNames": [
+            "Jaeger",
+            "None"
+          ]
+        }
+      }
+    },
+    "server": {
+      "type": "object",
+      "title": "Server",
+      "properties": {
+        "listen": {
+          "type": "array",
+          "title": "List of ports and services the proxy listens and forward to",
+          "items": {
+            "type": "object",
+            "properties": {
+              "port": {
+                "type": "integer",
+                "title": "Port"
+              },
+              "name": {
+                "type": "string",
+                "title": "Service",
+                "$enum": "#/internal/name"
+              }
+            }
+          }
+        }
+      }
+    },
+    "internal": {
+      "type": "array",
+      "title": "List of Internal Services",
+      "items": {
+        "$ref": "#/definitions/service"
+      }
+    },
+    "routes": {
+      "type": "array",
+      "title": "Routes",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "match": {
+            "type": "object",
+            "title": "Matching Rules",
+            "properties": {
+              "uri_path": {
+                "type": "string",
+                "title": "URI path"
+              },
+              "http_method": {
+                "type": "string",
+                "title": "HTTP method"
+              },
+              "server_port": {
+                "type": "string",
+                "title": "Server port",
+                "$enum": "#/server/listen/port"
+              }
+            }
+          },
+          "destination": {
+            "type": "object",
+            "title": "Service to redirect traffic",
+            "properties": {
+              "service": {
+                "type": "string",
+                "$enum": "#/internal/name"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
