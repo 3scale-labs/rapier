@@ -66,39 +66,33 @@
           "default": "emerg",
           "enum": [
             "debug",
+            "info",
+            "notice",
+            "warn",
+            "error",
+            "crit",
+            "alert",
             "emerg"
-          ],
-          "enumNames": [
-            "Debug",
-            "Emerg"
           ]
         },
         "error_log": {
           "type": "string",
           "title": "Error log level",
-          "description": "The desired level of logging for raised errors",
+          "description": "Where the error logs will be stored",
+          "default": "stderr",
           "enum": [
             "stderr",
-            "/dev/null",
-            "none"
-          ],
-          "enumNames": [
-            "stderr",
-            "Silent",
-            "No logging at all."
+            "/dev/null"
           ]
         },
         "access_log": {
           "type": "string",
           "title": "Access Log",
-          "description": "Where the logs are going to be displayed",
+          "description": "Where the access logs are going to be stored",
+          "default": "stout",
           "enum": [
             "stdout",
-            "none"
-          ],
-          "enumNames": [
-            "stdout",
-            "Not shown"
+            "/dev/null"
           ]
         },
         "opentracing_tracer": {
